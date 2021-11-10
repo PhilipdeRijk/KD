@@ -216,7 +216,7 @@ class DefaultFormatBundle:
             results['gt_masks'] = DC(results['gt_masks'], cpu_only=True)
         if 'gt_semantic_seg' in results:
             results['gt_semantic_seg'] = DC(
-                to_tensor(results['gt_semantic_seg'][None, ...]), stack=True)
+                to_tensor(results['gt_semantic_seg'][None, ...]), stack=True, padding_value=255)
         return results
 
     def _add_default_meta_keys(self, results):
@@ -317,6 +317,9 @@ class Collect:
         data['img_metas'] = DC(img_meta, cpu_only=True)
         for key in self.keys:
             data[key] = results[key]
+            # if key == 'gt_semantic_seg':
+                # setattr(data[key], 'padding_value', 255)
+                # data[key]['padding_value'] = 255
         return data
 
     def __repr__(self):

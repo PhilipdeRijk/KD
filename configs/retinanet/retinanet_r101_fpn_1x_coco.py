@@ -3,4 +3,4 @@ model = dict(
     backbone=dict(
         depth=101,
         init_cfg=dict(type='Pretrained',
-                      checkpoint='torchvision://resnet101')))
+                      checkpoint='checkpoints/resnet101-63fe2227.pth')))

@@ -70,11 +70,12 @@ class BaseSemanticHead(BaseModule, metaclass=ABCMeta):
     def simple_test(self, x, img_metas, rescale=False):
         output = self.forward(x)
         seg_preds = output['seg_preds']
-        seg_preds = F.interpolate(
-            seg_preds,
-            size=img_metas[0]['pad_shape'][:2],
-            mode='bilinear',
-            align_corners=False)
+        
+        # seg_preds = F.interpolate(
+        #     seg_preds,
+        #     size=img_metas[0]['pad_shape'][:2],
+        #     mode='bilinear',
+        #     align_corners=False)
 
         if rescale:
             h, w, _ = img_metas[0]['img_shape']
@@ -83,4 +84,8 @@ class BaseSemanticHead(BaseModule, metaclass=ABCMeta):
             h, w, _ = img_metas[0]['ori_shape']
             seg_preds = F.interpolate(
                 seg_preds, size=(h, w), mode='bilinear', align_corners=False)
+        seg_preds = F.softmax(seg_preds, dim=1)
+        seg_preds = seg_preds.argmax(dim=1)
+        seg_preds = seg_preds.cpu().numpy()
+        seg_preds = list(seg_preds)
         return seg_preds
