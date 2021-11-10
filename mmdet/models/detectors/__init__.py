@@ -39,6 +39,9 @@ from .yolo import YOLOV3
 from .yolof import YOLOF
 from .yolox import YOLOX
 
+from .kd_one_stage_custom import CustomKnowledgeDistillationSingleStageDetector
+from .kd_one_stage_custom_seg_det import CustomKnowledgeDistillationMultiTaskNetwork
+
 __all__ = [
     'ATSS', 'BaseDetector', 'SingleStageDetector', 'TwoStageDetector', 'RPN',
     'KnowledgeDistillationSingleStageDetector', 'FastRCNN', 'FasterRCNN',
@@ -47,5 +50,7 @@ __all__ = [
     'NASFCOS', 'PointRend', 'GFL', 'CornerNet', 'PAA', 'YOLOV3', 'YOLACT',
     'VFNet', 'DETR', 'TridentFasterRCNN', 'SparseRCNN', 'SCNet', 'SOLO',
     'DeformableDETR', 'AutoAssign', 'YOLOF', 'CenterNet', 'YOLOX',
-    'TwoStagePanopticSegmentor', 'PanopticFPN', 'QueryInst'
+    'TwoStagePanopticSegmentor', 'PanopticFPN', 'QueryInst', 
+    'CustomKnowledgeDistillationSingleStageDetector', 
+    'CustomKnowledgeDistillationMultiTaskNetwork'
 ]

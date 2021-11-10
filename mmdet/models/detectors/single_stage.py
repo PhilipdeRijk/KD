@@ -169,3 +169,4 @@ class SingleStageDetector(BaseDetector):
             *outs, img_metas, with_nms=with_nms)
 
         return det_bboxes, det_labels
+    

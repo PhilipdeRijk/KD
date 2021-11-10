@@ -8,7 +8,9 @@ model = dict(
         type='MobileNetV2',
         out_indices=(4, 7),
         norm_cfg=dict(type='BN', eps=0.001, momentum=0.03),
-        init_cfg=dict(type='TruncNormal', layer='Conv2d', std=0.03)),
+        # init_cfg=dict(type='TruncNormal', layer='Conv2d', std=0.03)),
+        init_cfg=dict(
+            type='Pretrained', checkpoint='checkpoints/mobilenet_v2_batch256_imagenet-ff34753d.pth')),
     neck=dict(
         type='SSDNeck',
         in_channels=(96, 1280),
@@ -143,3 +145,5 @@ custom_hooks = [
     dict(type='NumClassCheckHook'),
     dict(type='CheckInvalidLossHook', interval=50, priority='VERY_LOW')
 ]
+
+# load_from = 'checkpoints/ssdlite_mobilenetv2_scratch_600e_coco_20210629_110627-974d9307.pth'

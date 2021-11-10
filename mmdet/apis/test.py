@@ -27,7 +27,11 @@ def single_gpu_test(model,
         with torch.no_grad():
             result = model(return_loss=False, rescale=True, **data)
 
-        batch_size = len(result)
+
+        ##############################
+        # batch_size = len(result)
+        ##############################
+        batch_size = 1
         if show or out_dir:
             if batch_size == 1 and isinstance(data['img'][0], torch.Tensor):
                 img_tensor = data['img'][0]
@@ -48,22 +52,35 @@ def single_gpu_test(model,
                     out_file = osp.join(out_dir, img_meta['ori_filename'])
                 else:
                     out_file = None
+                if isinstance(result, tuple):
+                    model.module.show_result(
+                        img_show,
+                        result[0][i],
+                        show=show,
+                        out_file=out_file,
+                        score_thr=show_score_thr)
+                else:
+                    model.module.show_result(
+                        img_show,
+                        result[i],
+                        show=show,
+                        out_file=out_file,
+                        score_thr=show_score_thr)
 
-                model.module.show_result(
-                    img_show,
-                    result[i],
-                    show=show,
-                    out_file=out_file,
-                    score_thr=show_score_thr)
 
         # encode mask results
-        if isinstance(result[0], tuple):
-            result = [(bbox_results, encode_mask_results(mask_results))
-                      for bbox_results, mask_results in result]
-        results.extend(result)
+        if isinstance(result, tuple):
+            # result = [(bbox_results, encode_mask_results(mask_results))
+                    #   for bbox_results, mask_results in result]
+            results.append(result)
+            # if i ==2:
+                # break
+        else:
+            results.extend(result)
 
         for _ in range(batch_size):
             prog_bar.update()
+
     return results
 
 

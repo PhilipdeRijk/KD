@@ -71,11 +71,14 @@ class PanopticFPNHead(BaseSemanticHead):
                 '`num_stuff_classes` directly, the `num_classes` will be '
                 'set to `num_stuff_classes + 1`')
             # num_classes = num_stuff_classes + 1 for PanopticFPN.
-            assert num_classes == num_stuff_classes + 1
+            # assert num_classes == num_stuff_classes + 1
+
         super(PanopticFPNHead, self).__init__(num_stuff_classes + 1, init_cfg,
                                               loss_seg)
         self.num_things_classes = num_things_classes
         self.num_stuff_classes = num_stuff_classes
+        # self.num_classes = num_things_classes + num_stuff_classes
+        self.num_classes = 171
         if fg_range is not None and bg_range is not None:
             self.fg_range = fg_range
             self.bg_range = bg_range
@@ -131,7 +134,8 @@ class PanopticFPNHead(BaseSemanticHead):
 
         Things classes will be merged to one class in PanopticFPN.
         """
-        gt_semantic_seg = self._set_things_to_void(gt_semantic_seg)
+        # gt_semantic_seg_2 = gt_semantic_seg
+        # gt_semantic_seg = self._set_things_to_void(gt_semantic_seg)
         return super().loss(seg_preds, gt_semantic_seg)
 
     def init_weights(self):

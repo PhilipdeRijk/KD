@@ -6,10 +6,32 @@ import pycocotools.mask as mask_util
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Polygon
 
+import cv2
+import os
+
 from ..utils import mask2ndarray
 
 EPS = 1e-2
 
+
+def vis_att_map(att_map, img_path='data/cityscapes-tiny/leftImg8bit/train/frankfurt/frankfurt_000001_062250_leftImg8bit.png', vis_size=(256, 128), index=1, dst_dir = "att_maps"):
+    
+    if not os.path.exists(dst_dir):
+        os.mkdir(dst_dir)
+
+    img = cv2.imread(img_path, 1)
+    # img = cv2.resize(img, dsize=vis_size)
+    h, w, _ = img.shape
+
+    att_map_1 = att_map.cpu().detach().numpy()
+    # att_map_1 = cv2.resize(att_map_1, dsize=(w, h))
+    # att_map_255 = np.uint8(att_map_1 * 255)
+    att_map_255 = np.uint8(((att_map_1 - np.min(att_map_1))/np.ptp(att_map_1)) * 255)
+
+    heat_img = cv2.applyColorMap(att_map_255, cv2.COLORMAP_VIRIDIS)
+    heat_img = cv2.cvtColor(heat_img, cv2.COLOR_BGR2RGB)
+    # img_add = cv2.addWeighted(img, 0.3, heat_img, 0.7, 0)
+    cv2.imwrite('%s/%d.png' % (dst_dir, index), cv2.cvtColor(heat_img, cv2.COLOR_BGR2RGB))
 
 def color_val_matplotlib(color):
     """Convert various input in BGR order to normalized RGB matplotlib color

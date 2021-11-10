@@ -517,6 +517,7 @@ class AnchorHead(BaseDenseHead, BBoxTestMixin):
             bbox_targets_list,
             bbox_weights_list,
             num_total_samples=num_total_samples)
+
         return dict(loss_cls=losses_cls, loss_bbox=losses_bbox)
 
     def aug_test(self, feats, img_metas, rescale=False):
